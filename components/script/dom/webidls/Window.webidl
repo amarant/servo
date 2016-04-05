@@ -99,6 +99,9 @@ partial interface Window {
   void releaseEvents();
 };
 
+// http://w3c.github.io/IndexedDB/
+Window implements IDBEnvironment;
+
 // https://drafts.csswg.org/cssom/#extensions-to-the-window-interface
 partial interface Window {
    [NewObject]
