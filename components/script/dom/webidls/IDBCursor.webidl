@@ -14,7 +14,7 @@ enum IDBCursorDirection {
     "prevunique"
 };
 
-[Exposed=(Window,Worker,System)]
+//[Exposed=(Window,Worker,System)]
 interface IDBCursor {
     readonly    attribute (IDBObjectStore or IDBIndex) source;
 
