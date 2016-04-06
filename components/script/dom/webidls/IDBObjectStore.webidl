@@ -19,7 +19,7 @@ interface IDBObjectStore {
     [Throws]
     readonly    attribute any            keyPath;
 
-    readonly    attribute DOMStringList  indexNames;
+//    readonly    attribute DOMStringList  indexNames;
     readonly    attribute IDBTransaction transaction;
     readonly    attribute boolean        autoIncrement;
 

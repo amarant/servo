@@ -15,7 +15,7 @@ interface IDBDatabase : EventTarget {
     readonly    attribute DOMString          name;
     readonly    attribute unsigned long long version;
 
-    readonly    attribute DOMStringList      objectStoreNames;
+//    readonly    attribute DOMStringList      objectStoreNames;
 
     [Throws]
     IDBObjectStore createObjectStore (DOMString name, optional IDBObjectStoreParameters optionalParameters);
