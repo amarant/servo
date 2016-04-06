@@ -2969,7 +2969,7 @@ class CGSpecializedMethod(CGAbstractExternMethod):
     """
     def __init__(self, descriptor, method):
         self.method = method
-        name = method.identifier.name
+        name = descriptor.internalNameFor(method.identifier.name)
         args = [Argument('*mut JSContext', 'cx'), Argument('HandleObject', '_obj'),
                 Argument('*const %s' % descriptor.concreteType, 'this'),
                 Argument('*const JSJitMethodCallArgs', 'args')]

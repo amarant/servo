@@ -280,7 +280,7 @@ class Descriptor(DescriptorProvider):
         self._binaryNames.setdefault('__legacycaller', 'LegacyCall')
         self._binaryNames.setdefault('__stringifier', 'Stringifier')
 
-        self._internalNames = desc.get('internalNames', {})
+        self._internalNames = desc.get('internalNames', {'continue': 'continue_'})
 
         for member in self.interface.members:
             if not member.isAttr() and not member.isMethod():
