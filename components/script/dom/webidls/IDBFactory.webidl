@@ -10,7 +10,7 @@
  * liability, trademark and document use rules apply.
  */
 
-interface Principal;
+//interface Principal;
 
 dictionary IDBOpenDBOptions
 {
@@ -44,7 +44,7 @@ interface IDBFactory {
   short
   cmp(any first,
       any second);
-
+/*
   [Throws, ChromeOnly]
   IDBOpenDBRequest
   openForPrincipal(Principal principal,
@@ -62,4 +62,5 @@ interface IDBFactory {
   deleteForPrincipal(Principal principal,
                      DOMString name,
                      optional IDBOpenDBOptions options);
+*/
 };
