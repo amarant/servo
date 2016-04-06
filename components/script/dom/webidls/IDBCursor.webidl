@@ -38,9 +38,3 @@ interface IDBCursor {
     [Throws]
     IDBRequest delete ();
 };
-
-[Exposed=(Window,Worker,System)]
-interface IDBCursorWithValue : IDBCursor {
-    [Throws]
-    readonly    attribute any value;
-};
