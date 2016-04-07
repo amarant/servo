@@ -8,7 +8,7 @@
  * Copyright © 2012 W3C® (MIT, ERCIM, Keio), All Rights Reserved. W3C
  * liability, trademark and document use rules apply.
  */
-
+/*
 //[Exposed=(Window,Worker,System)]
 interface IDBKeyRange {
   [Throws]
@@ -32,3 +32,4 @@ interface IDBKeyRange {
   [NewObject, Throws]
   static IDBKeyRange bound (any lower, any upper, optional boolean lowerOpen = false, optional boolean upperOpen = false);
 };
+*/

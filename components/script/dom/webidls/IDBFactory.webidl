@@ -12,11 +12,13 @@
 
 //interface Principal;
 
+/*
 dictionary IDBOpenDBOptions
 {
   [EnforceRange] unsigned long long version;
   StorageType storage;
 };
+*/
 
 /**
  * Interface that defines the indexedDB property on a window.  See
@@ -30,6 +32,7 @@ interface IDBFactory {
   open(DOMString name,
        [EnforceRange] unsigned long long version);
 
+/*
   [Throws]
   IDBOpenDBRequest
   open(DOMString name,
@@ -44,6 +47,8 @@ interface IDBFactory {
   short
   cmp(any first,
       any second);
+*/
+
 /*
   [Throws, ChromeOnly]
   IDBOpenDBRequest

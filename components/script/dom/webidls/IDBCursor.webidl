@@ -6,7 +6,7 @@
  * The origin of this IDL file is
  * https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html#idl-def-IDBCursorDirection
  */
-
+/*
 enum IDBCursorDirection {
     "next",
     "nextunique",
@@ -38,3 +38,4 @@ interface IDBCursor {
     [Throws]
     IDBRequest delete ();
 };
+*/

@@ -9,7 +9,7 @@
  * Copyright © 2012 W3C® (MIT, ERCIM, Keio), All Rights Reserved. W3C
  * liability, trademark and document use rules apply.
  */
-
+/*
 //[Exposed=(Window,Worker,System)]
 interface IDBDatabase : EventTarget {
     readonly    attribute DOMString          name;
@@ -38,10 +38,15 @@ partial interface IDBDatabase {
     //[Func="mozilla::dom::IndexedDatabaseManager::ExperimentalFeaturesEnabled"]
     //readonly    attribute StorageType        storage;
 
-    [/*Exposed=Window,*/ Throws]
+    [
+    //Exposed=Window,
+    Throws]
     IDBRequest createMutableFile (DOMString name, optional DOMString type);
 
     // this is deprecated due to renaming in the spec
-    [/*Exposed=Window,*/ Throws]
+    [
+    //Exposed=Window,
+    Throws]
     IDBRequest mozCreateFileHandle (DOMString name, optional DOMString type); // now createMutableFile
 };
+*/

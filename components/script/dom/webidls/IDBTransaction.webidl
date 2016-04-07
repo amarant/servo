@@ -7,7 +7,7 @@
  * https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html#idl-def-IDBTransaction
  * https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html#idl-def-IDBTransactionMode
  */
-
+/*
 enum IDBTransactionMode {
     "readonly",
     "readwrite",
@@ -42,3 +42,4 @@ interface IDBTransaction : EventTarget {
 partial interface IDBTransaction {
 //    readonly    attribute DOMStringList objectStoreNames;
 };
+*/

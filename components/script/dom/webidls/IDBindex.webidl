@@ -6,7 +6,7 @@
  * The origin of this IDL file is
  * https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html#idl-def-IDBIndexParameters
  */
-
+/*
 dictionary IDBIndexParameters {
     boolean unique = false;
     boolean multiEntry = false;
@@ -67,3 +67,4 @@ partial interface IDBIndex {
     [Throws]
     IDBRequest getAllKeys (optional any key, [EnforceRange] optional unsigned long limit);
 };
+*/

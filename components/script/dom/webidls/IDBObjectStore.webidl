@@ -6,7 +6,7 @@
  * The origin of this IDL file is
  * https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html#idl-def-IDBObjectStore
  */
-
+/*
 dictionary IDBObjectStoreParameters {
     (DOMString or sequence<DOMString>)? keyPath = null;
     boolean                             autoIncrement = false;
@@ -74,3 +74,4 @@ partial interface IDBObjectStore {
     [Throws]
     IDBRequest openKeyCursor (optional any range, optional IDBCursorDirection direction = "next");
 };
+*/

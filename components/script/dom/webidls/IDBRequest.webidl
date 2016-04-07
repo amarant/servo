@@ -21,9 +21,9 @@ interface IDBRequest : EventTarget {
     [Throws]
     readonly    attribute DOMError?            error;
 
-    readonly    attribute (IDBObjectStore or IDBIndex or IDBCursor)? source;
-    readonly    attribute IDBTransaction?      transaction;
-    readonly    attribute IDBRequestReadyState readyState;
+    //readonly    attribute (IDBObjectStore or IDBIndex or IDBCursor)? source;
+    //readonly    attribute IDBTransaction?      transaction;
+    //readonly    attribute IDBRequestReadyState readyState;
 
                 attribute EventHandler         onsuccess;
 

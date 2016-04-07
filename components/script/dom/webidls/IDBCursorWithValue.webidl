@@ -6,9 +6,10 @@
  * The origin of this IDL file is
  * https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html#idl-def-IDBCursorDirection
  */
-
+/*
 //[Exposed=(Window,Worker,System)]
 interface IDBCursorWithValue : IDBCursor {
     [Throws]
     readonly    attribute any value;
 };
+*/
