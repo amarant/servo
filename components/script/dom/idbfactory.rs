@@ -4,9 +4,12 @@
 
 use dom::bindings::codegen::Bindings::IDBFactoryBinding;
 use dom::bindings::codegen::Bindings::IDBFactoryBinding::IDBFactoryMethods;
+use dom::bindings::global::GlobalRef;
+use dom::bindings::error::Fallible;
 use dom::bindings::js::Root;
 use dom::bindings::reflector::{Reflector, reflect_dom_object};
 use dom::idbopendbrequest::IDBOpenDBRequest;
+use util::str::DOMString;
 
 
 #[dom_struct]
@@ -27,8 +30,8 @@ impl IDBFactory {
     }
 }
 
-impl IDBFactoryMethods {
+impl IDBFactoryMethods for IDBFactory {
     fn Open(&self, name: DOMString, version: u64) -> Fallible<Root<IDBOpenDBRequest>> {
-      Ok(IDBOpenDBRequest::new())
+      Ok(Root::from_ref(&IDBOpenDBRequest::new_inherited()))
     }
 }

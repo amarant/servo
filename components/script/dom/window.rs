@@ -32,6 +32,7 @@ use dom::node::{Node, TrustedNodeAddress, from_untrusted_node_address, window_fr
 use dom::performance::Performance;
 use dom::screen::Screen;
 use dom::storage::Storage;
+use dom::idbfactory::IDBFactory;
 use euclid::{Point2D, Rect, Size2D};
 use gfx_traits::LayerId;
 use ipc_channel::ipc::{self, IpcSender};
@@ -801,6 +802,10 @@ impl WindowMethods for Window {
     fn DevicePixelRatio(&self) -> Finite<f64> {
         let dpr = self.window_size.get().map_or(1.0f32, |data| data.device_pixel_ratio.get());
         Finite::wrap(dpr as f64)
+    }
+
+    fn GetIndexedDB(&self) -> Fallible<Option<Root<IDBFactory>>> {
+        Ok(Some(Root::from_ref(&IDBFactory::new_inherited())))
     }
 }
 
