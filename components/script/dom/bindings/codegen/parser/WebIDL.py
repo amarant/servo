@@ -220,6 +220,8 @@ class IDLObject(object):
 
         return deps
 
+    def getInnerType(self):
+        return None # Override me!
 
 class IDLScope(IDLObject):
     def __init__(self, location, parentScope, identifier):
@@ -1972,8 +1974,8 @@ class IDLUnresolvedType(IDLType):
         if obj.isTypedef():
             assert self.name.name == obj.identifier.name
             typedefType = IDLTypedefType(self.location, obj.innerType,
-                                         obj.identifier)
-            assert not typedefType.isComplete()
+                                         obj.identifier.name)
+            #assert not typedefType.isComplete()
             return typedefType.complete(scope)
         elif obj.isCallback() and not obj.isInterface():
             assert self.name.name == obj.identifier.name
@@ -2133,6 +2135,9 @@ class IDLNullableType(IDLType):
     def _getDependentObjects(self):
         return self.inner._getDependentObjects()
 
+    def getInnerType(self):
+        return self.inner
+
 
 class IDLSequenceType(IDLType):
     def __init__(self, location, parameterType):
@@ -2147,7 +2152,7 @@ class IDLSequenceType(IDLType):
             self.name = self.inner.name + "Sequence"
 
     def __eq__(self, other):
-        return isinstance(other, IDLSequenceType) and self.inner == other.inner
+        return isinstance(other, IDLSequenceType) and self.inner == other.getInnerType()
 
     def __str__(self):
         return self.inner.__str__() + "Sequence"
@@ -2345,6 +2350,8 @@ class IDLUnionType(IDLType):
                 self.memberTypes[i] = type.complete(scope)
 
         self.name = "Or".join(typeName(type) for type in self.memberTypes)
+        if self.name == 'DocumentOrBlobOrStringOrURLSearchParamsOrNull':
+            print 'DocumentOrBlobOrStringOrURLSearchParamsOrNull'
         self.flatMemberTypes = list(self.memberTypes)
         i = 0
         while i < len(self.flatMemberTypes):
@@ -2368,9 +2375,9 @@ class IDLUnionType(IDLType):
                                       [nullableType.location,
                                        self.flatMemberTypes[i].location])
                 self._dictionaryType = self.flatMemberTypes[i]
-            elif self.flatMemberTypes[i].isUnion():
-                self.flatMemberTypes[i:i + 1] = self.flatMemberTypes[i].memberTypes
-                continue
+            #elif self.flatMemberTypes[i].isUnion():
+            #    self.flatMemberTypes[i:i + 1] = self.flatMemberTypes[i].memberTypes
+            #    continue
             i += 1
 
         for (i, t) in enumerate(self.flatMemberTypes[:-1]):
@@ -2522,6 +2529,10 @@ class IDLTypedefType(IDLType):
         IDLType.__init__(self, location, name)
         self.inner = innerType
         self.builtin = False
+        if not isinstance(name, str):
+            print 'wrong'
+        if str(name) == 'BodyInit':
+            print 'BodyInit'
 
     def __eq__(self, other):
         return isinstance(other, IDLTypedefType) and self.inner == other.inner
@@ -2568,6 +2579,9 @@ class IDLTypedefType(IDLType):
     def isDictionary(self):
         return self.inner.isDictionary()
 
+    def isUnion(self):
+        return self.inner.isUnion()
+
     def isArrayBuffer(self):
         return self.inner.isArrayBuffer()
 
@@ -2586,17 +2600,28 @@ class IDLTypedefType(IDLType):
     def isCallbackInterface(self):
         return self.inner.isCallbackInterface()
 
+
+    def isCallback(self):
+        return self.inner.isCallback()
+
     def isNonCallbackInterface(self):
         return self.inner.isNonCallbackInterface()
 
     def isComplete(self):
-        return False
+        return self.inner.isComplete()
+
+    def isTypedef(self):
+        return True
 
     def complete(self, parentScope):
+        if str(self.name) == 'BodyInit':
+            print 'BodyInit'
         if not self.inner.isComplete():
             self.inner = self.inner.complete(parentScope)
         assert self.inner.isComplete()
-        return self.inner
+        if str(self.name) == 'BodyInit':
+            print 'BodyInit'
+        return self
 
     # Do we need a resolveType impl?  I don't think it's particularly useful....
 
@@ -2604,6 +2629,8 @@ class IDLTypedefType(IDLType):
         return self.inner.tag()
 
     def unroll(self):
+        if str(self.name) == 'BodyInit':
+            print 'BodyInit'
         return self.inner.unroll()
 
     def isDistinguishableFrom(self, other):
@@ -2776,6 +2803,8 @@ class IDLWrapperType(IDLType):
             return self.isNonCallbackInterface()
 
         # Not much else |other| can be
+        if not other.isObject():
+            print 'stop'
         assert other.isObject()
         return False
 
@@ -3166,9 +3195,11 @@ class IDLValue(IDLObject):
         if type == self.type:
             return self  # Nothing to do
 
+        if type.isTypedef():
+            return self.coerceToType(type.inner, location)
         # We first check for unions to ensure that even if the union is nullable
         # we end up with the right flat member type, not the union's type.
-        if type.isUnion():
+        elif type.isUnion():
             # We use the flat member types here, because if we have a nullable
             # member type, or a nested union, we want the type the value
             # actually coerces to, not the nullable or nested union type.
@@ -3828,7 +3859,7 @@ class IDLAttribute(IDLInterfaceMember):
             t = self.type.complete(scope)
 
             assert not isinstance(t, IDLUnresolvedType)
-            assert not isinstance(t, IDLTypedefType)
+            #assert not isinstance(t, IDLTypedefType)
             assert not isinstance(t.name, IDLUnresolvedIdentifier)
             self.type = t
 
@@ -4145,7 +4176,7 @@ class IDLArgument(IDLObjectWithIdentifier):
         if not self.type.isComplete():
             type = self.type.complete(scope)
             assert not isinstance(type, IDLUnresolvedType)
-            assert not isinstance(type, IDLTypedefType)
+            #assert not isinstance(type, IDLTypedefType)
             assert not isinstance(type.name, IDLUnresolvedIdentifier)
             self.type = type
 
@@ -4519,7 +4550,7 @@ class IDLMethod(IDLInterfaceMember, IDLScope):
             if not returnType.isComplete():
                 returnType = returnType.complete(scope)
                 assert not isinstance(returnType, IDLUnresolvedType)
-                assert not isinstance(returnType, IDLTypedefType)
+                #assert not isinstance(returnType, IDLTypedefType)
                 assert not isinstance(returnType.name, IDLUnresolvedIdentifier)
                 overload.returnType = returnType
 

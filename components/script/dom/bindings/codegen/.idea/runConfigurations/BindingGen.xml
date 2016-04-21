@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BindingGen" type="PythonConfigurationType" factoryName="Python">
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <envs>
+      <env name="PYTHONPATH" value="/Volumes/MacData/Code/servo/components/script/dom/bindings/codegen:/Volumes/MacData/Applications/PyCharm CE.app/Contents/helpers/pydev:/Volumes/MacData/Code/servo/components/script/dom/bindings/codegen/parser:/Volumes/MacData/Code/servo/components/script/dom/bindings/codegen/ply" />
+      <env name="PYTHONUNBUFFERED" value="1" />
+    </envs>
+    <option name="SDK_HOME" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="IS_MODULE_SDK" value="true" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
+    <module name="codegen" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/BindingGen.py" />
+    <option name="PARAMETERS" value="$PROJECT_DIR$/Bindings.conf $PROJECT_DIR$/../../../../../target/debug/build/script-40ae7c6e10ed0645/out $PROJECT_DIR$/../../../../../target/debug/build/script-40ae7c6e10ed0645/out/Bindings/XMLHttpRequestBinding $PROJECT_DIR$/../../webidls/XMLHttpRequest.webidl" />
+    <option name="SHOW_COMMAND_LINE" value="false" />
+    <method />
+  </configuration>
+</component>

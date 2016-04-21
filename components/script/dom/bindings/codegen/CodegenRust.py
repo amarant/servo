@@ -11,6 +11,9 @@ import re
 import string
 import textwrap
 import functools
+import os
+
+print os.environ['PYTHONPATH'].split(os.pathsep)
 
 from WebIDL import (
     BuiltinTypes,
@@ -2001,7 +2004,11 @@ def UnionTypes(descriptors, dictionaries, callbacks, typedefs, config):
     unionStructs = dict()
     for (t, descriptor, dictionary) in getAllTypes(descriptors, dictionaries, typedefs, callbacks):
         assert not descriptor or not dictionary
+        if str(t) == 'BlobOrStringOrURLSearchParams':
+            print 'stop'
+        print 'before unroll  %s' % str(t)
         t = t.unroll()
+        print 'after unroll  %s' % str(t)
         if not t.isUnion():
             continue
         name = str(t)
