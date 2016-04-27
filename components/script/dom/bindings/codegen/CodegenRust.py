@@ -19,6 +19,7 @@ from WebIDL import (
     IDLType,
     IDLInterfaceMember,
     IDLUndefinedValue,
+    IDLTypedefType,
 )
 
 from Configuration import (
@@ -3747,6 +3748,8 @@ def getUnionTypeTemplateVars(type, descriptorProvider):
     # for getJSToNativeConversionInfo.
     # Also, for dictionaries we would need to handle conversion of
     # null/undefined to the dictionary correctly.
+    if type.name == 'Document':
+        print 'Document'
     if type.isDictionary():
         raise TypeError("Can't handle dictionaries in unions")
 
@@ -3773,6 +3776,9 @@ def getUnionTypeTemplateVars(type, descriptorProvider):
     elif type.isPrimitive():
         name = type.name
         typeName = builtinNames[type.tag()]
+    elif isinstance(type, IDLTypedefType):
+        name = type.name
+        typeName = type.name
     else:
         name = type.name
         typeName = "/*" + type.name + "*/"
