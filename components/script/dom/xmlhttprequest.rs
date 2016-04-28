@@ -10,7 +10,7 @@ use dom::bindings::codegen::Bindings::BlobBinding::BlobMethods;
 use dom::bindings::codegen::Bindings::EventHandlerBinding::EventHandlerNonNull;
 use dom::bindings::codegen::Bindings::WindowBinding::WindowMethods;
 use dom::bindings::codegen::Bindings::XMLHttpRequestBinding;
-use dom::bindings::codegen::Bindings::XMLHttpRequestBinding::BodyInit;
+use dom::bindings::codegen::Bindings::XMLHttpRequestBinding::{BodyInit, DocumentOrBodyInit};
 use dom::bindings::codegen::Bindings::XMLHttpRequestBinding::XMLHttpRequestMethods;
 use dom::bindings::codegen::Bindings::XMLHttpRequestBinding::XMLHttpRequestResponseType;
 use dom::bindings::conversions::{ToJSValConvertible};
@@ -519,7 +519,7 @@ impl XMLHttpRequestMethods for XMLHttpRequest {
     }
 
     // https://xhr.spec.whatwg.org/#the-send()-method
-    fn Send(&self, data: Option<BodyInit>) -> ErrorResult {
+    fn Send(&self, data: Option<DocumentOrBodyInit>) -> ErrorResult {
         // Step 1, 2
         if self.ready_state.get() != XMLHttpRequestState::Opened || self.send_flag.get() {
             return Err(Error::InvalidState);
@@ -1387,30 +1387,36 @@ impl XHRTimeoutCallback {
 trait Extractable {
     fn extract(&self) -> (Vec<u8>, Option<DOMString>);
 }
-impl Extractable for BodyInit {
+impl Extractable for DocumentOrBodyInit {
     // https://fetch.spec.whatwg.org/#concept-bodyinit-extract
     fn extract(&self) -> (Vec<u8>, Option<DOMString>) {
         match *self {
-            BodyInit::String(ref s) => {
-                let encoding = UTF_8 as EncodingRef;
-                (encoding.encode(s, EncoderTrap::Replace).unwrap(),
-                    Some(DOMString::from("text/plain;charset=UTF-8")))
+            DocumentOrBodyInit::BodyInit(ref doc) => {
+                 match *doc {
+                    BodyInit::String(ref s) => {
+                        let encoding = UTF_8 as EncodingRef;
+                        (encoding.encode(s, EncoderTrap::Replace).unwrap(),
+                            Some(DOMString::from("text/plain;charset=UTF-8")))
+                    },
+                    BodyInit::URLSearchParams(ref usp) => {
+                        // Default encoding is UTF-8.
+                        (usp.serialize(None).into_bytes(),
+                            Some(DOMString::from("application/x-www-form-urlencoded;charset=UTF-8")))
+                    },
+                    BodyInit::Blob(ref b) => {
+                        let data = b.get_data();
+                        let content_type = if b.Type().as_ref().is_empty() {
+                            None
+                        } else {
+                            Some(b.Type())
+                        };
+                        (data.get_bytes().to_vec(), content_type)
+                    },
+                }
             },
-            BodyInit::URLSearchParams(ref usp) => {
-                // Default encoding is UTF-8.
-                (usp.serialize(None).into_bytes(),
-                    Some(DOMString::from("application/x-www-form-urlencoded;charset=UTF-8")))
-            },
-            BodyInit::Blob(ref b) => {
-                let data = b.get_data();
-                let content_type = if b.Type().as_ref().is_empty() {
-                    None
-                } else {
-                    Some(b.Type())
-                };
-                (data.get_bytes().to_vec(), content_type)
-            },
+            DocumentOrBodyInit::Document(ref bi) => unimplemented!(),
         }
+       
     }
 }
 
