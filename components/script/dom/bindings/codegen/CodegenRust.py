@@ -2091,6 +2091,12 @@ def hasTypedefVariant(t):
             return True
     return False
 
+def hasTypedefVariant(t):
+    for memberType in t.memberTypes:
+        if isinstance(memberType, IDLTypedefType):
+            return True
+    return False
+
 def UnionTypes(descriptors, dictionaries, callbacks, typedefs, config, filterTypedefVariant):
     """
     Returns a CGList containing CGUnionStructs for every union.
