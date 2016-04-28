@@ -7,6 +7,7 @@ use cors::{AsyncCORSResponseListener, CORSRequest, RequestMode, allow_cross_orig
 use document_loader::DocumentLoader;
 use dom::bindings::cell::DOMRefCell;
 use dom::bindings::codegen::Bindings::BlobBinding::BlobMethods;
+use dom::bindings::codegen::Bindings::DocumentBinding::DocumentMethods;
 use dom::bindings::codegen::Bindings::EventHandlerBinding::EventHandlerNonNull;
 use dom::bindings::codegen::Bindings::WindowBinding::WindowMethods;
 use dom::bindings::codegen::Bindings::XMLHttpRequestBinding;
@@ -34,6 +35,7 @@ use encoding::all::UTF_8;
 use encoding::label::encoding_from_whatwg_label;
 use encoding::types::{DecoderTrap, EncoderTrap, Encoding, EncodingRef};
 use euclid::length::Length;
+use html5ever::serialize::Serializable;
 use hyper::header::Headers;
 use hyper::header::{Accept, ContentLength, ContentType, qitem};
 use hyper::http::RawStatus;
@@ -1391,8 +1393,8 @@ impl Extractable for DocumentOrBodyInit {
     // https://fetch.spec.whatwg.org/#concept-bodyinit-extract
     fn extract(&self) -> (Vec<u8>, Option<DOMString>) {
         match *self {
-            DocumentOrBodyInit::BodyInit(ref doc) => {
-                 match *doc {
+            DocumentOrBodyInit::BodyInit(ref bi) => {
+                 match *bi {
                     BodyInit::String(ref s) => {
                         let encoding = UTF_8 as EncodingRef;
                         (encoding.encode(s, EncoderTrap::Replace).unwrap(),
@@ -1414,7 +1416,28 @@ impl Extractable for DocumentOrBodyInit {
                     },
                 }
             },
-            DocumentOrBodyInit::Document(ref bi) => unimplemented!(),
+            DocumentOrBodyInit::Document(ref d) => {
+                let data: Vec<u8> = d.serialize().unwrap().into();
+                let decoded_data: Vec<u8> = match &*d.CharacterSet() {
+                    "UTF-8" => {
+                        debug!("Document is already utf-8, skipping conversion {:?}", d.url());
+                        data
+                    },
+                    document_charset => {
+                        debug!("Document is {:?} we have to decode", document_charset);
+                        let charset = encoding_from_whatwg_label(&*d.CharacterSet()).unwrap_or(UTF_8);
+                        charset.decode(&*data, DecoderTrap::Replace).unwrap().into_bytes()
+                    }
+                };
+                let mut content_type = String::new();
+                if d.is_html_document() {
+                    content_type.push_str("text/html");
+                } else {
+                    content_type.push_str("application/xml");
+                };
+                content_type.push_str(";charset=UTF-8");
+                (decoded_data, Some(DOMString::from(content_type)))
+            }
         }
        
     }

@@ -3877,6 +3877,8 @@ class CGUnionConversionStruct(CGThing):
             return memberType.name
 
         def get_match(name):
+            if name == 'Document':
+                print 'Document'
             return (
                 "match %s::TryConvertTo%s(cx, value) {\n"
                 "    Err(_) => return Err(()),\n"
