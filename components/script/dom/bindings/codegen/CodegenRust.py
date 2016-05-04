@@ -3869,6 +3869,9 @@ class CGUnionConversionStruct(CGThing):
         memberTypes = self.type.flatMemberTypes
         names = []
         conversions = []
+        if self.type.name == 'DocumentOrBodyInit':
+            print 'DocumentOrBodyInit'
+
 
         def get_name(memberType):
             if self.type.isGeckoInterface():
@@ -3903,6 +3906,14 @@ class CGUnionConversionStruct(CGThing):
         else:
             arrayObject = None
 
+        typedefMemberTypes = filter(lambda t: isinstance(t, IDLTypedefType), memberTypes)
+        if len(typedefMemberTypes) > 0:
+            typeNames = [get_name(memberType) for memberType in typedefMemberTypes]
+            typedefObject = CGList(CGGeneric(get_match(typeName)) for typeName in typeNames)
+            names.extend(typeNames)
+        else:
+            typedefObject = None
+
         dateObjectMemberTypes = filter(lambda t: t.isDate(), memberTypes)
         if len(dateObjectMemberTypes) > 0:
             assert len(dateObjectMemberTypes) == 1
@@ -3935,14 +3946,16 @@ class CGUnionConversionStruct(CGThing):
         else:
             object = None
 
-        hasObjectTypes = interfaceObject or arrayObject or dateObject or nonPlatformObject or object
+        hasObjectTypes = interfaceObject or arrayObject or typedefObject or dateObject or nonPlatformObject or object
         if hasObjectTypes:
-            assert interfaceObject or arrayObject
+            assert interfaceObject or arrayObject or typedefObject
             templateBody = CGList([], "\n")
             if interfaceObject:
                 templateBody.append(interfaceObject)
             if arrayObject:
                 templateBody.append(arrayObject)
+            if typedefObject:
+                templateBody.append(typedefObject)
             conversions.append(CGIfWrapper("value.get().is_object()", templateBody))
         stringTypes = [t for t in memberTypes if t.isString() or t.isEnum()]
         numericTypes = [t for t in memberTypes if t.isNumeric()]
