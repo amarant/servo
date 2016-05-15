@@ -7,7 +7,6 @@
 use dom::bindings::codegen::Bindings::EventListenerBinding::EventListener;
 use dom::bindings::codegen::Bindings::FunctionBinding::Function;
 use dom::bindings::codegen::Bindings::TestBindingBinding::{self, DocumentOrTypedefTest, TestBindingMethods, TestDictionary, TestDictionaryDefaults, TestEnum};
-use dom::bindings::codegen::UnionTypes::DocumentOrBlobOrHTMLElementOrFormData;
 use dom::bindings::codegen::UnionTypes::{BlobOrBoolean, BlobOrBlobSequence};
 use dom::bindings::codegen::UnionTypes::{BlobOrString, BlobOrUnsignedLong, EventOrString};
 use dom::bindings::codegen::UnionTypes::{EventOrUSVString, HTMLElementOrLong};
