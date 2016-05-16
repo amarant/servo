@@ -2034,6 +2034,7 @@ class IDLUnresolvedType(IDLType):
         return IDLWrapperType(self.location, obj, self._promiseInnerType)
 
     def isDistinguishableFrom(self, other):
+        print self.name
         raise TypeError("Can't tell whether an unresolved type is or is not "
                         "distinguishable from other things")
 
@@ -2442,6 +2443,7 @@ class IDLUnionType(IDLType):
         # For every type in otherTypes, check that it's distinguishable from
         # every type in our types
         for u in otherTypes:
+            print u.name
             if any(not t.isDistinguishableFrom(u) for t in self.memberTypes):
                 return False
         return True
@@ -2658,6 +2660,8 @@ class IDLTypedefType(IDLType):
         return self.inner.unroll()
 
     def isDistinguishableFrom(self, other):
+        print self.name
+        print other.name
         return self.inner.isDistinguishableFrom(other)
 
     def _getDependentObjects(self):
