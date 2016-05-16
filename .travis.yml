@@ -38,7 +38,7 @@ matrix:
 
 branches:
   only:
-    - master
+    - typdefs
 
 notifications:
   webhooks:
