@@ -17,11 +17,7 @@ matrix:
          - bash etc/ci/check_no_unwrap.sh
          - bash etc/ci/lockfile_changed.sh
          - bash etc/ci/manifest_changed.sh
-      cache:
-        directories:
-          - .cargo
-          - .servo
-          - $HOME/.ccache
+      env: CCACHE=/usr/bin/ccache
       addons:
         apt:
           packages:
