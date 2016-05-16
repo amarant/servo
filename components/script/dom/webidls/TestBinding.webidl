@@ -77,7 +77,7 @@ dictionary TestDictionaryDefaults {
   object? nullableObjectValue = null;
 };
 
-typedef (Blob or HTMLElement or FormData) TypedefTest;
+typedef (Blob or DOMString or URLSearchParams) TypedefTest;
 
 [Constructor,
  Constructor(sequence<unrestricted double> numberSequence),

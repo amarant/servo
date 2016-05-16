@@ -2035,8 +2035,9 @@ class IDLUnresolvedType(IDLType):
 
     def isDistinguishableFrom(self, other):
         print self.name
-        raise TypeError("Can't tell whether an unresolved type is or is not "
-                        "distinguishable from other things")
+        raise TypeError("Can't tell whether the unresolved type '%s' "
+                        "is or is not distinguishable from the other '%s'"
+                        % (self.name, other.name))
 
 
 class IDLNullableType(IDLType):
