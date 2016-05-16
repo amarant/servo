@@ -22,7 +22,6 @@ matrix:
           - .cargo
           - .servo
           - $HOME/.ccache
-      env: CCACHE=/usr/bin/ccache
       addons:
         apt:
           packages:
